@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificación de Correo</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding-top: 50px; }
+        .mensaje { font-size: 1.2rem; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Verificando tu cuenta...</h1>
+    <div id="resultado" class="mensaje">Por favor, espera un momento.</div>
+
+    <script>
+        // 1. Capturar el token de la URL (?token=xxxx)
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+
+        async function verificarToken() {
+            const contenedor = document.getElementById('resultado');
+
+            if (!token) {
+                contenedor.style.color = 'red';
+                contenedor.textContent = 'Enlace de verificación no válido o ausente.';
+                return;
+            }
+
+            try {
+                // 2. Hacer la petición al backend que creamos recién
+                const respuesta = await fetch(`/api/auth/verificar-email?token=${token}`);
+                const datos = await respuesta.json();
+
+                if (respuesta.ok) {
+                    contenedor.style.color = 'green';
+                    contenedor.textContent = datos.mensaje; // "Correo verificado correctamente..."
+                } else {
+                    contenedor.style.color = 'red';
+                    contenedor.textContent = datos.error || 'Ocurrió un error al verificar.';
+                }
+            } catch (error) {
+                contenedor.style.color = 'red';
+                contenedor.textContent = 'Error de conexión con el servidor.';
+            }
+        }
+
+        verificarToken();
+    </script>
+</body>
+</html>

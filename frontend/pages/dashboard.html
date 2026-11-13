@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de administración | Gestión de Turnos</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+  </head>
+  <body>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <h2>Gestión de Turnos</h2>
+        <nav>
+          <a href="dashboard.html" class="activo">Inicio</a>
+          <a href="#turnos">Turnos</a>
+          <button id="cerrarSesion" type="button">Cerrar sesión</button>
+        </nav>
+      </aside>
+      
+      <main class="contenido">
+        <header class="encabezado">
+          <h1>Panel principal</h1>
+          <p id="datosUsuario">Cargando usuario...</p>
+        </header>
+
+        <section class="bienvenida">
+          <h2>Bienvenida/o al sistema</h2>
+          <p>Desde aquí podrás gestionar los turnos médicos del centro.</p>
+        </section>
+
+        <!-- FORMULARIO PARA CREAR NUEVO TURNO -->
+        <section class="seccion-turnos" style="margin-bottom: 40px;">
+          <form id="formCrearTurno" class="form-turno">
+            <h3>Registrar Nuevo Turno</h3>
+            
+            <div>
+              <label for="fecha_turno">Fecha del Turno:</label>
+              <input type="date" id="fecha_turno" required>
+            </div>
+
+            <div>
+              <label for="hora_turno">Hora (HH:mm):</label>
+              <input type="time" id="hora_turno" required>
+            </div>
+
+            <div>
+              <label for="medio_solicitado">Medio Solicitado:</label>
+              <select id="medio_solicitado" required>
+                <option value="Web">Web</option>
+                <option value="Telefonico">Telefónico</option>
+                <option value="Presencial">Presencial</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="estado_turno">Estado:</label>
+              <select id="estado_turno" required>
+                <option value="Reservado">Reservado</option>
+                <option value="Confirmado">Confirmado</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="dni_paciente">DNI del Paciente:</label>
+              <input type="number" id="dni_paciente" placeholder="Ej: 30100101" required>
+            </div>
+
+            <div>
+              <label for="id_practica">ID Práctica:</label>
+              <input type="number" id="id_practica" placeholder="Ej: 2" required>
+            </div>
+
+            <div>
+              <label for="id_equipo">ID Equipo:</label>
+              <input type="number" id="id_equipo" placeholder="Ej: 15" required>
+            </div>
+
+            <div>
+              <label for="id_disponibilidad">ID Disponibilidad:</label>
+              <input type="number" id="id_disponibilidad" placeholder="Ej: 2" required>
+            </div>
+
+            <button type="submit">Guardar Turno</button>
+            <div id="mensajeTurno" class="mensaje-feedback"></div>
+          </form>
+        </section>
+
+        <!-- TABLA DE TURNOS REGISTRADOS -->
+        <section id="turnos" class="seccion-turnos">
+          <h2>Listado de Turnos Registrados</h2>
+          <div style="overflow-x: auto;">
+            <table id="tablaTurnos">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Hora</th>
+                  <th>Estado</th>
+                  <th>Medio</th>
+                  <th>DNI Paciente</th>
+                  <th>Práctica</th>
+                  <th>Equipo</th>
+                  <th>Disponibilidad</th> <!-- <- Agregado para que coincida con el JS -->
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="10" style="text-align: center;">Cargando turnos...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/dashboard.js"></script>
+  </body>
+</html>

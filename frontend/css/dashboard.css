@@ -1,0 +1,246 @@
+/* ============================== */
+/* ESTILOS EXCLUSIVOS - DASHBOARD */
+/* ============================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+/* Layout Principal (Sidebar + Contenido) */
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Barra lateral (Sidebar Fija y Estética) */
+.sidebar {
+    width: 260px;
+    background-color: #002855;
+    color: white;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    /* Propiedades clave para cuando hay mucho contenido en la tabla */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto; /* Permite hacer scroll interno en la sidebar si es muy pequeña la pantalla */
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar nav a {
+    color: #b0c4de;
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.activo {
+    background-color: #004080;
+    color: white;
+}
+
+#cerrarSesion {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    margin-top: auto;
+    transition: background-color 0.2s;
+}
+
+#cerrarSesion:hover {
+    background-color: #c82333;
+}
+
+/* Contenido Principal */
+.contenido {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    background-color: #f4f7f6;
+}
+
+.encabezado {
+    margin-bottom: 25px;
+}
+
+.encabezado h1 {
+    color: #002855;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+#datosUsuario {
+    color: #666;
+    font-size: 14px;
+}
+
+.bienvenida {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.bienvenida h2 {
+    color: #002855;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+/* Sección de Turnos y Tabla */
+.seccion-turnos {
+    margin-top: 20px;
+}
+
+.seccion-turnos h2 {
+    color: #002855;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+th, td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+th {
+    background-color: #002855;
+    color: white;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Botón de eliminar dentro de la tabla */
+.btn-eliminar {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-eliminar:hover {
+    background-color: #c82333;
+}
+
+/* Formulario de Registro de Turnos */
+.form-turno {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.form-turno h3 {
+    grid-column: 1 / -1;
+    color: #002855;
+    font-size: 18px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 8px;
+}
+
+.form-turno div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-turno label {
+    font-size: 13px;
+    color: #555;
+    font-weight: bold;
+}
+
+.form-turno input,
+.form-turno select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-turno input:focus,
+.form-turno select:focus {
+    outline: none;
+    border-color: #002855;
+}
+
+.form-turno button[type="submit"] {
+    grid-column: 1 / -1;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.form-turno button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+.mensaje-feedback {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 5px;
+}
