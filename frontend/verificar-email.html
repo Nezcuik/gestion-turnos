@@ -13,7 +13,6 @@
     <div id="resultado" class="mensaje">Por favor, espera un momento.</div>
 
     <script>
-        // 1. Capturar el token de la URL (?token=xxxx)
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
 
@@ -27,13 +26,12 @@
             }
 
             try {
-                // 2. Hacer la petición al backend que creamos recién
                 const respuesta = await fetch(`/api/auth/verificar-email?token=${token}`);
                 const datos = await respuesta.json();
 
                 if (respuesta.ok) {
                     contenedor.style.color = 'green';
-                    contenedor.textContent = datos.mensaje; // "Correo verificado correctamente..."
+                    contenedor.textContent = datos.mensaje; // "Correo verificado correctamente dice"
                 } else {
                     contenedor.style.color = 'red';
                     contenedor.textContent = datos.error || 'Ocurrió un error al verificar.';

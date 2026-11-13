@@ -85,9 +85,23 @@
           </form>
         </section>
 
-        <!-- TABLA DE TURNOS REGISTRADOS -->
+        <!-- TABLA DE TURNOS REGISTRADOS CON FILTROS -->
         <section id="turnos" class="seccion-turnos">
           <h2>Listado de Turnos Registrados</h2>
+          
+          <!-- SECCIÓN DE FILTROS -->
+          <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="number" id="filtroDni" placeholder="Filtrar por DNI Paciente" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+            <select id="filtroEstado" style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+              <option value="Todos">Todos los estados</option>
+              <option value="Reservado">Reservado</option>
+              <option value="Confirmado">Confirmado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+            <button id="btnFiltrar" type="button" style="padding: 6px 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Filtrar</button>
+            <button id="btnLimpiar" type="button" style="padding: 6px 12px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Limpiar</button>
+          </div>
+
           <div style="overflow-x: auto;">
             <table id="tablaTurnos">
               <thead>
@@ -100,7 +114,7 @@
                   <th>DNI Paciente</th>
                   <th>Práctica</th>
                   <th>Equipo</th>
-                  <th>Disponibilidad</th> <!-- <- Agregado para que coincida con el JS -->
+                  <th>Disponibilidad</th>
                   <th>Acciones</th>
                 </tr>
               </thead>

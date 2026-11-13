@@ -34,6 +34,26 @@ document.addEventListener('DOMContentLoaded', function () {
     // 4. Cargar Turnos al iniciar la vista
     cargarTurnos();
 
+    // 4.1 Eventos para los filtros
+    const btnFiltrar = document.getElementById('btnFiltrar');
+    const btnLimpiar = document.getElementById('btnLimpiar');
+
+    if (btnFiltrar) {
+        btnFiltrar.addEventListener('click', () => {
+            const dni = document.getElementById('filtroDni').value;
+            const estado = document.getElementById('filtroEstado').value;
+            cargarTurnos(dni, estado);
+        });
+    }
+
+    if (btnLimpiar) {
+        btnLimpiar.addEventListener('click', () => {
+            document.getElementById('filtroDni').value = '';
+            document.getElementById('filtroEstado').value = 'Todos';
+            cargarTurnos();
+        });
+    }
+
     // 5. Manejar el formulario de creación de turnos (POST)
     const formCrearTurno = document.getElementById('formCrearTurno');
     const mensajeTurno = document.getElementById('mensajeTurno');
@@ -46,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const nuevoTurno = {
                 fecha_turno: document.getElementById('fecha_turno').value,
-                hora_turno: document.getElementById('hora_turno').value + ':00', // Formato HH:mm:ss para MySQL
+                hora_turno: document.getElementById('hora_turno').value + ':00',
                 medio_solicitado: document.getElementById('medio_solicitado').value,
                 estado_turno: document.getElementById('estado_turno').value,
                 dni_paciente: Number(document.getElementById('dni_paciente').value),
@@ -71,10 +91,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     mensajeTurno.style.color = 'green';
                     mensajeTurno.textContent = '¡Turno creado con éxito!';
                     formCrearTurno.reset();
-                    cargarTurnos(); // Actualizar la tabla dinámicamente
+                    cargarTurnos();
                 } else {
                     mensajeTurno.style.color = 'red';
-                    // Si el validador devuelve errores en un array o un error único
                     if (Array.isArray(resultado.errores)) {
                         mensajeTurno.textContent = resultado.errores.join(' | ');
                     } else {
@@ -90,15 +109,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Función para obtener y listar los turnos desde la API REST (GET)
-async function cargarTurnos() {
+// Función para obtener y listar los turnos desde la API REST (GET con filtros opcionales)
+async function cargarTurnos(dni = '', estado = 'Todos') {
     const token = sessionStorage.getItem('token');
     const tbody = document.querySelector('#tablaTurnos tbody');
 
     if (!tbody) return;
 
     try {
-        const respuesta = await fetch('/api/turnos', {
+        let url = '/api/turnos';
+        const params = new URLSearchParams();
+        if (dni) params.append('dni', dni);
+        if (estado && estado !== 'Todos') params.append('estado', estado);
+        
+        if (params.toString()) {
+            url += `?${params.toString()}`;
+        }
+
+        const respuesta = await fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -121,7 +149,7 @@ async function cargarTurnos() {
         tbody.innerHTML = '';
 
         if (turnos.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px;">No hay turnos registrados.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 20px;">No se encontraron turnos con los filtros aplicados.</td></tr>`;
             return;
         }
 
@@ -170,7 +198,7 @@ async function eliminarTurno(id) {
 
         if (respuesta.ok) {
             alert('Turno eliminado correctamente');
-            cargarTurnos(); // Recargar la tabla
+            cargarTurnos();
         } else {
             alert(resultado.error || 'No se pudo eliminar el turno');
         }

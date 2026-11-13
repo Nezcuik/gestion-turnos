@@ -38,7 +38,6 @@ async function validarCreacionTurno(req, res, next) {
             }
         }
 
-        // IDs obligatorios y positivos
         for (const campo of ['id_practica', 'id_equipo', 'id_disponibilidad']) {
             const valor = Number(datos[campo]);
 
@@ -68,45 +67,59 @@ async function validarCreacionTurno(req, res, next) {
             errores.push('fecha_confirmacion debe tener el formato YYYY-MM-DD');
         }
 
-        if (errores.length > 0) {
-            return res.status(400).json({ errores });
-        }
-
-        // Verificar que las referencias existan en la base de datos
         const [pacientes] = await db.execute(
             'SELECT 1 FROM paciente WHERE dni_paciente = ? LIMIT 1',
             [datos.dni_paciente]
         );
-
         if (pacientes.length === 0) {
-            return res.status(404).json({ error: 'El paciente no existe' });
+            errores.push('El paciente no existe');
         }
 
         const [practicas] = await db.execute(
             'SELECT 1 FROM practica WHERE id_practica = ? LIMIT 1',
             [datos.id_practica]
         );
-
         if (practicas.length === 0) {
-            return res.status(404).json({ error: 'La práctica no existe' });
+            errores.push('La práctica no existe');
         }
 
         const [equipos] = await db.execute(
             'SELECT 1 FROM equipo WHERE id_equipo = ? LIMIT 1',
             [datos.id_equipo]
         );
-
         if (equipos.length === 0) {
-            return res.status(404).json({ error: 'El equipo no existe' });
+            errores.push('El equipo no existe');
         }
 
         const [disponibilidades] = await db.execute(
             'SELECT 1 FROM disponibilidad WHERE id_disponibilidad = ? LIMIT 1',
             [datos.id_disponibilidad]
         );
-
         if (disponibilidades.length === 0) {
-            return res.status(404).json({ error: 'La disponibilidad no existe' });
+            errores.push('La disponibilidad no existe');
+        }
+
+        // validaciones agregadas hoy
+        // ---------------------------------------------------------------------------------------------
+        // Verificar que la fecha sea despues no antes del dias de la creacion del turno
+        const hoy = new Date().toISOString().slice(0, 10);
+        if (datos.fecha_turno && datos.fecha_turno < hoy) {
+            errores.push('No se pueden asignar turnos en fechas anteriores a la actual');
+        }
+
+        // Verifica q el paciente no tenga otro turno con la misma fecha y hora
+        const [turnoPaciente] = await db.execute(
+            'SELECT 1 FROM turno WHERE dni_paciente = ? AND DATE(fecha_turno) = ? AND TIME(hora_turno) = ? LIMIT 1',
+            [datos.dni_paciente, datos.fecha_turno, datos.hora_turno]
+        );
+
+        if (turnoPaciente.length > 0) {
+            errores.push('El paciente ya tiene un turno registrado en esa misma fecha y hora');
+        }
+        // ---------------------------------------------------------------------------------------------
+        
+        if (errores.length > 0) {
+            return res.status(400).json({ errores });
         }
 
         next();

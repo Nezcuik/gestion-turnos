@@ -11,7 +11,7 @@ router.post('/login', authController.login);
 router.post('/registro-paciente', registroController.registrarPaciente);
 router.post('/registro-medico', registroController.registrarMedico);
 
-// NUEVA RUTA: Endpoint para verificar el correo electrónico con el token
+// Endpoint para verificar el correo electrónico con el token
 router.get('/verificar-email', verificacionController.verificarEmail);
 
 module.exports = router;

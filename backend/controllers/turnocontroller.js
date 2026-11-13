@@ -1,13 +1,28 @@
 const db = require('../config/database');
 const turnoservice = require('../services/turnoservice');
 
-// ==============================
-// OBTENER TODOS LOS TURNOS
-// ==============================
+
+// OBTENER TODOS LOS TURNOS (CON FILTROS OPCIONALES)
 
 async function obtenerTurnos(req, res) {
     try {
-        const turnos = await turnoservice.obtenerTodos();
+        const { dni, estado } = req.query;
+        let query = 'SELECT * FROM turno WHERE 1=1';
+        const params = [];
+
+        if (dni && dni.trim() !== '') {
+            query += ' AND dni_paciente = ?';
+            params.push(dni.trim());
+        }
+
+        if (estado && estado !== 'Todos') {
+            query += ' AND estado_turno = ?';
+            params.push(estado);
+        }
+
+        query += ' ORDER BY id_turno DESC';
+
+        const [turnos] = await db.query(query, params);
         res.json(turnos);
     } catch (error) {
         console.error(error);
@@ -17,9 +32,9 @@ async function obtenerTurnos(req, res) {
     }
 }
 
-// ==============================
+
 // OBTENER TURNOS POR ID
-// =============================
+
 
 async function obtenerTurnoPorId(req, res) {
     try {
@@ -36,17 +51,15 @@ async function obtenerTurnoPorId(req, res) {
         res.json(turnos[0]);
     } catch (error) {
         console.error(error);
-
-
         res.status(500).json({
             error: 'Error al obtener el turno'
         });
     }
 }
 
-// ==============================
+
 // CREAR TURNO
-// ==============================
+
 
 async function crearTurno(req, res) {
     try {
@@ -96,16 +109,15 @@ async function crearTurno(req, res) {
         });
     } catch (error) {
         console.error(error);
-
         res.status(500).json({
             error: 'Error al crear el turno'
         });
     }
 }
 
-// ==============================
+
 // ACTUALIZAR TURNO
-// ==============================
+
 
 async function actualizarTurno(req, res) {
     try {
@@ -123,7 +135,6 @@ async function actualizarTurno(req, res) {
             id_disponibilidad
         } = req.body;
 
-        // Comprobar que el turno exista
         const [turnos] = await db.execute(
             'SELECT id_turno FROM turno WHERE id_turno = ?',
             [id]
@@ -135,7 +146,6 @@ async function actualizarTurno(req, res) {
             });
         }
 
-        // Actualizar los datos del turno
         await db.execute(
             `UPDATE turno
              SET fecha_turno = ?,
@@ -169,16 +179,15 @@ async function actualizarTurno(req, res) {
         });
     } catch (error) {
         console.error(error);
-
         res.status(500).json({
             error: 'Error al actualizar el turno'
         });
     }
 }
 
-// ==============================
+
 // ELIMINAR TURNO
-// ==============================
+
 
 async function eliminarTurno(req, res) {
     try {
@@ -200,16 +209,15 @@ async function eliminarTurno(req, res) {
         });
     } catch (error) {
         console.error(error);
-
         res.status(500).json({
             error: 'Error al eliminar el turno'
         });
     }
 }
 
-// ==============================
+
 // EXPORTAR CONTROLADORES
-// ==============================
+
 
 module.exports = {
     obtenerTurnos,

@@ -1,0 +1,40 @@
+Validacion 1
+
+const hoy = new Date().toISOString().slice(0, 10);
+if (datos.fecha_turno && datos.fecha_turno < hoy) {
+    errores.push('No se pueden asignar turnos en fechas anteriores a la actual');
+}
+
+--- Registrar Nuevo Turno
+
+Fecha del Turno: ANTERIOR A LA FECHA DE CREACION DEL TURNO
+Hora (HH:mm): CUALQUEIRA
+Medio Solicitado: Web
+Estado: Reservado
+DNI del Paciente: 12345678
+ID Práctica: 1
+ID Equipo: 1
+ID Disponibilidad: 1
+
+---
+
+Validacion 2
+
+// Verifica q el paciente no tenga otro turno con la misma fecha y hora
+const [turnoPaciente] = await db.execute(
+    'SELECT 1 FROM turno WHERE dni_paciente = ? AND fecha_turno = ? AND hora_turno = ? LIMIT 1',
+    [datos.dni_paciente, datos.fecha_turno, datos.hora_turno]
+);
+
+--- Registrar Nuevo Turno
+
+Fecha del Turno: 01/09/26
+Hora (HH:mm): 08:00
+Medio Solicitado: Web
+Estado: Reservado
+DNI del Paciente: 30100101
+ID Práctica: 1
+ID Equipo: 15
+ID Disponibilidad: 1
+
+---
